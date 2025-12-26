@@ -9,7 +9,7 @@ int main()
 	int P7[4] = {1,7,9,3};
 	int P8[4] = {6,8,4,2};
 
-	scanf_s("%d", &T);
+	scanf("%d", &T);
 
 	int* a = (int*)malloc(sizeof(int) * T);
 	int* b = (int*)malloc(sizeof(int) * T);
@@ -20,7 +20,7 @@ int main()
 
 	for (int i = 0; i < T; i++)
 	{
-		scanf_s("%d %d", &a[i], &b[i]);
+		scanf("%d %d", &a[i], &b[i]);
 	}
 
 	for (int i = 0; i < T; i++)
