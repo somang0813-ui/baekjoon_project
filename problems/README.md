@@ -1,7 +1,5 @@
-#EXAMPLE
-
-## BOJ 1234 - 문제 제목
-
+## EXAMPLE  
+## BOJ 1234
 - 링크: https://www.acmicpc.net/problem/1234
 - 태그: DFS / BFS / 그래프 / 구현
 - 난이도: Silver 2
