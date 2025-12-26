@@ -22,3 +22,10 @@
 ## 예시:
 - problems/BOJ_1234/yoon/solution.py
 - problems/BOJ_1234/jin/main.cpp
+
+## 문제 목록
+- 문제별 README는 각 문제 폴더에 있습니다.
+  - 예: `problems/BOJ_1234/README.md`
+
+## 규칙
+자세한 규칙은 `RULES.md` 참고.
