@@ -21,4 +21,4 @@
 
 ## 예시:
 - problems/BOJ_1234/yoon/solution.py
-- -problems/BOJ_1234/jin/main.cpp
+- problems/BOJ_1234/jin/main.cpp
