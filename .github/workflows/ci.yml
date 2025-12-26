@@ -1,0 +1,27 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Python syntax check
+        run: |
+          find . -name "*.py" -exec python -m py_compile {} +
+
+      - name: C/C++ compile check
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc g++
+          find . -name "*.c" -exec gcc -c {} +
+          find . -name "*.cpp" -exec g++ -std=c++17 -c {} +
