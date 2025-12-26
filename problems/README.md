@@ -1,6 +1,6 @@
-**#EXAMPLE**
+#EXAMPLE
 
-# BOJ 1234 - 문제 제목
+## BOJ 1234 - 문제 제목
 
 - 링크: https://www.acmicpc.net/problem/1234
 - 태그: DFS / BFS / 그래프 / 구현
