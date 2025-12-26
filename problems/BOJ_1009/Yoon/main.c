@@ -1,4 +1,4 @@
-#include <stdio.h>
+//#include <stdio.h>
 #include <stdlib.h>
 
 int main()
@@ -12,7 +12,7 @@ int main()
 	scanf_s("%d", &T);
 
 	int* a = (int*)malloc(sizeof(int) * T);
-	int* b = (int*)(sizeof(int) * T);
+	int* b = (int*)malloc(sizeof(int) * T);
 
 	int temp = 0;
 	int ans = 0;
