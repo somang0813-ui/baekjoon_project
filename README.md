@@ -19,6 +19,6 @@
 3. 본인 폴더에 코드 파일을 만든다. (예: `solution.py`, `main.cpp`)
 4. 커밋 후 푸시(또는 PR)한다.
 
-예시:
+## 예시:
 problems/BOJ_1234/yoon/solution.py
-problems/BOJ_1234/jin/main.cpp
+  problems/BOJ_1234/jin/main.cpp
