@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -19,9 +18,18 @@ jobs:
         run: |
           find . -name "*.py" -exec python -m py_compile {} +
 
-      - name: C/C++ compile check
+      - name: List C/C++ files
+        run: |
+          find . -name "*.c"
+          find . -name "*.cpp"
+
+      - name: C compile check (strict)
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc g++
-          find . -name "*.c" -exec gcc -c {} +
-          find . -name "*.cpp" -exec g++ -std=c++17 -c {} +
+          sudo apt-get install -y gcc
+          find . -name "*.c" -exec gcc -Wall -Wextra -Werror -c {} +
+
+      - name: C++ compile check (strict)
+        run: |
+          sudo apt-get install -y g++
+          find . -name "*.cpp" -exec g++ -std=c++17 -Wall -Wextra -Werror -c {} +
