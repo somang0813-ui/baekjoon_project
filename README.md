@@ -35,7 +35,7 @@ Pull Request 생성
 리뷰 & 머지  
 ↓  
 자동 기록 & Weekly 체크  
-```md
+```
 ---
 
 ## 📂 디렉터리 구조 규칙  
@@ -45,7 +45,7 @@ problems/
 └─ yoon-somang/ ← 본인 GitHub ID
 ├─ solution.cpp
 └─ README.md ← (선택) 풀이 설명  
-```md
+```
 ### 규칙 요약
 - `/problems` 폴더 **외부 수정 불가**
 - 문제 폴더 이름은 `boj-숫자` 또는 `pg-숫자`만 허용
@@ -61,7 +61,7 @@ problems/
 - PR에서 아래 형식으로 연결
 ```md
 Closes #문제이슈번호
-```md
+```
 ### 📅 Weekly Issue (선택)  
 
 - 주간 목표를 체크박스로 관리
