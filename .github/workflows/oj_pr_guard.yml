@@ -1,0 +1,94 @@
+name: OJ PR Guard
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check changed paths and author folder rules
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const prNumber = pr.number;
+            const author = pr.user.login;
+
+            // Get all changed files in PR (paginate)
+            let files = [];
+            let page = 1;
+            while (true) {
+              const resp = await github.rest.pulls.listFiles({
+                owner, repo, pull_number: prNumber, per_page: 100, page
+              });
+              files = files.concat(resp.data);
+              if (resp.data.length < 100) break;
+              page += 1;
+            }
+
+            if (files.length === 0) {
+              core.setFailed("No files changed. Please add your solution under /problems/<problem>/<your-github-id>/");
+              return;
+            }
+
+            const invalidOutsideProblems = [];
+            const invalidStructure = [];
+            const invalidAuthorFolder = [];
+
+            for (const f of files) {
+              const path = f.filename;
+
+              // 1) only /problems/** allowed
+              if (!path.startsWith("problems/")) {
+                invalidOutsideProblems.push(path);
+                continue;
+              }
+
+              // 2) must be problems/<problem-id>/<author>/...
+              // split: ["problems", "<problem-id>", "<user>", ...]
+              const parts = path.split("/");
+              if (parts.length < 4) {
+                invalidStructure.push(path);
+                continue;
+              }
+
+              const userFolder = parts[2];
+              if (userFolder !== author) {
+                invalidAuthorFolder.push(path);
+              }
+            }
+
+            if (invalidOutsideProblems.length) {
+              core.setFailed(
+                `PR can only change files under /problems/**.\n` +
+                `Found changes outside:\n- ` + invalidOutsideProblems.join("\n- ")
+              );
+              return;
+            }
+
+            if (invalidStructure.length) {
+              core.setFailed(
+                `Each change must be inside /problems/<problem-id>/<your-github-id>/...\n` +
+                `Invalid structure:\n- ` + invalidStructure.join("\n- ")
+              );
+              return;
+            }
+
+            if (invalidAuthorFolder.length) {
+              core.setFailed(
+                `You can only modify your own folder: /problems/<problem-id>/${author}/...\n` +
+                `Found paths not matching your GitHub ID:\n- ` + invalidAuthorFolder.join("\n- ")
+              );
+              return;
+            }
+
+            core.info("OK: Path rules satisfied.");
