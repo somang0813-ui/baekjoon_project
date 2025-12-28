@@ -1,0 +1,43 @@
+name: "Problem"
+description: "Open an issue before you start solving a problem"
+title: "[PROBLEM] <platform>-<id> - <title>"
+labels: ["problem"]
+body:
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: "BOJ or Programmers"
+      placeholder: "BOJ"
+    validations:
+      required: true
+
+  - type: input
+    id: problem_id
+    attributes:
+      label: Problem ID
+      description: "e.g. 1000 or 42576"
+      placeholder: "1000"
+    validations:
+      required: true
+
+  - type: input
+    id: dir
+    attributes:
+      label: Directory
+      description: "Suggested directory name under /problems"
+      placeholder: "boj-1000"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: progress
+    attributes:
+      label: Progress
+      description: "Update this as you go"
+      options:
+        - label: Read & understood the problem
+        - label: Designed approach
+        - label: Implemented solution
+        - label: Passed sample tests
+        - label: Finalized (cleanup + explanation)
