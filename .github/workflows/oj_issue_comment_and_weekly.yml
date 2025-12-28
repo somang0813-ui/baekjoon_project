@@ -1,0 +1,128 @@
+name: OJ Issue Comment + Weekly Progress
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ["main", "master"]
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: write
+
+jobs:
+  on-merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment commit list to linked Issue + weekly progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const prNumber = pr.number;
+
+            const body = pr.body || "";
+            const author = pr.user.login;
+
+            // --- helper: extract issue numbers from PR body (Closes/Fixes/Resolves #123)
+            function extractLinkedIssues(text) {
+              const regex = /\b(?:close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s*#(\d+)\b/gi;
+              const ids = [];
+              let m;
+              while ((m = regex.exec(text)) !== null) {
+                ids.push(Number(m[1]));
+              }
+              return [...new Set(ids)];
+            }
+
+            // --- helper: extract Weekly: #123 from PR body
+            function extractWeeklyIssue(text) {
+              const m = text.match(/^\s*Weekly\s*:\s*#(\d+)\s*$/im);
+              return m ? Number(m[1]) : null;
+            }
+
+            // --- get commits for PR
+            let commits = [];
+            let page = 1;
+            while (true) {
+              const resp = await github.rest.pulls.listCommits({
+                owner, repo, pull_number: prNumber, per_page: 100, page
+              });
+              commits = commits.concat(resp.data);
+              if (resp.data.length < 100) break;
+              page += 1;
+            }
+
+            const commitLines = commits.map(c => {
+              const sha = c.sha.substring(0, 7);
+              const msg = (c.commit?.message || "").split("\n")[0];
+              return `- ${sha} ${msg}`;
+            });
+
+            const commitComment = [
+              `✅ PR #${prNumber} merged by @${author}`,
+              ``,
+              `**Commits:**`,
+              ...(commitLines.length ? commitLines : ["- (no commits found)"])
+            ].join("\n");
+
+            // 1) Comment to linked problem issues
+            const issueIds = extractLinkedIssues(body);
+            if (issueIds.length === 0) {
+              core.info("No linked issue (Closes #...) found in PR body. Skipping issue comment.");
+            } else {
+              for (const issue_number of issueIds) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number,
+                  body: commitComment
+                });
+                core.info(`Commented commits to Issue #${issue_number}`);
+              }
+            }
+
+            // 2) Weekly progress comment (optional)
+            const weeklyIssue = extractWeeklyIssue(body);
+            if (!weeklyIssue) {
+              core.info("No Weekly: #... found. Skipping weekly progress.");
+              return;
+            }
+
+            // Fetch weekly issue body
+            const weekly = await github.rest.issues.get({
+              owner, repo, issue_number: weeklyIssue
+            });
+
+            const weeklyBody = weekly.data.body || "";
+
+            // Count markdown checkboxes: - [ ] and - [x]
+            const total = (weeklyBody.match(/-\s*\[\s*\]/g) || []).length + (weeklyBody.match(/-\s*\[\s*x\s*\]/ig) || []).length;
+            const done = (weeklyBody.match(/-\s*\[\s*x\s*\]/ig) || []).length;
+
+            if (total === 0) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: weeklyIssue,
+                body: `@${author} PR #${prNumber} merged. Weekly issue has no checkboxes, so progress rate couldn't be computed.`
+              });
+              core.info("Weekly issue has no checkboxes.");
+              return;
+            }
+
+            const rate = Math.round((done / total) * 100);
+
+            const weeklyComment = [
+              `📊 Weekly progress update (after merging PR #${prNumber})`,
+              `- Done: **${done}** / Total: **${total}**`,
+              `- Rate: **${rate}%**`,
+              ``,
+              `PR: #${prNumber} by @${author}`
+            ].join("\n");
+
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: weeklyIssue,
+              body: weeklyComment
+            });
+
+            core.info(`Commented weekly progress to Issue #${weeklyIssue}`);
