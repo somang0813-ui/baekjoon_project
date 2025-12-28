@@ -1,0 +1,28 @@
+name: "Weekly"
+description: "Weekly goals issue"
+title: "[WEEKLY] YYYY-WW"
+labels: ["weekly"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## How to use
+        - Each member writes weekly goals as checkboxes.
+        - When you merge a PR, link this issue in the PR body as:
+          `Weekly: #<issue-number>`
+        - The bot will comment progress rate based on checked items.
+
+  - type: textarea
+    id: goals
+    attributes:
+      label: Weekly Goals (checkbox list)
+      description: "Write goals as markdown checkboxes like - [ ] ..."
+      placeholder: |
+        ### yoon-somang
+        - [ ] boj-1000
+        - [ ] pg-42576
+
+        ### alice
+        - [ ] boj-1920
+    validations:
+      required: true
