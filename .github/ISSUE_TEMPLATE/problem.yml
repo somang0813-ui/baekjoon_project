@@ -1,32 +1,24 @@
 name: "Problem"
 description: "Open an issue before you start solving a problem"
-title: "[PROBLEM] <platform>-<id> - <title>"
+title: "[PROBLEM] <LV ?> - <title> "
 labels: ["problem"]
 body:
+  
   - type: input
-    id: platform
+    id: level
     attributes:
-      label: Platform
-      description: "BOJ or Programmers"
-      placeholder: "BOJ"
+      label: Level
+      description: "0 ~ 5"
+      placeholder: ""
     validations:
       required: true
 
   - type: input
-    id: problem_id
+    id: title
     attributes:
-      label: Problem ID
-      description: "e.g. 1000 or 42576"
-      placeholder: "1000"
-    validations:
-      required: true
-
-  - type: input
-    id: dir
-    attributes:
-      label: Directory
-      description: "Suggested directory name under /problems"
-      placeholder: "boj-1000"
+      label: Title
+      description: "e.g 동전 던지기, 팽이 돌리기"
+      placeholder: "Title"
     validations:
       required: true
 
