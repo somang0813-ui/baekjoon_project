@@ -3,7 +3,6 @@ description: "Open an issue before you start solving a problem"
 title: "[PROBLEM] <LV ?> - <title> "
 labels: ["problem"]
 body:
-  
   - type: input
     id: level
     attributes:
