@@ -39,7 +39,7 @@ Pull Request 생성
 ---
 
 ## 📂 디렉터리 구조 규칙  
-
+'''nd
 problems/
 └─ boj-1000/ ← 문제 폴더 (boj-숫자 / pg-숫자)
 └─ yoon-somang/ ← 본인 GitHub ID
