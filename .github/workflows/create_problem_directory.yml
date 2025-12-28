@@ -24,11 +24,20 @@ jobs:
             const issueBody = issue.body || "";
 
             // Parse level and title from issue body
-            const levelMatch = issueBody.match(/### Level\s*\n\s*(.+)/);
-            const titleMatch = issueBody.match(/### Title\s*\n\s*(.+)/);
+            // GitHub Issue Forms format: ### Label\n\nValue
+            const levelMatch = issueBody.match(/### Level\s*\n+\s*(.+)/);
+            const titleMatch = issueBody.match(/### Title\s*\n+\s*(.+)/);
 
             if (!levelMatch || !titleMatch) {
-              core.setFailed("Could not parse level or title from issue body");
+              core.setFailed(`Could not parse level or title from issue body.\n\nIssue body:\n${issueBody}`);
+
+              // Comment on issue with debug info
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `❌ Failed to parse issue fields.\n\nPlease make sure the issue template was filled correctly.\n\nDebug info:\n- Level match: ${levelMatch ? 'found' : 'not found'}\n- Title match: ${titleMatch ? 'found' : 'not found'}`
+              });
               return;
             }
 
