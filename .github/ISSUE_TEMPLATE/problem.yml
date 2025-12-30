@@ -1,6 +1,6 @@
 name: Problem
 description: Open an issue before you start solving a problem
-title: "[${{inputs.status}}] ${{inputs.platform}} ${{inputs.tier}}${{inputs.problem_number}} LV${{inputs.level}} - ${{inputs.title}}"
+title: "[문제] 제목이 자동으로 설정됩니다"
 labels: ["problem"]
 body:
   - type: dropdown
@@ -30,7 +30,7 @@ body:
     id: tier
     attributes:
       label: 티어
-      description: Baekjoon 선택 시 티어를 선택하세요
+      description: Baekjoon 
       options:
         - 브론즈
         - 실버
@@ -41,7 +41,7 @@ body:
     id: problem_number
     attributes:
       label: 문제 번호
-      description: Baekjoon 선택 시 문제 번호를 입력하세요
+      description: Baekjoon
       placeholder: "1000"
 
   - type: input
