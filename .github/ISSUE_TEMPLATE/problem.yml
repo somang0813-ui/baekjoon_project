@@ -1,34 +1,60 @@
 name: Problem
 description: Open an issue before you start solving a problem
-title: "[PROBLEM] LV? - "
+title: "[STATUS] [PLATFORM] - "
 labels: ["problem"]
 body:
+  - type: checkboxes
+    id: status
+    attributes:
+      label: Status
+      description: Select one status (will be reflected in title and labels)
+      options:
+        - label: 진행 중
+        - label: 보류
+        - label: SOS
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 플랫폼
+      description: 문제 플랫폼 선택
+      options:
+        - Baekjoon
+        - Programmers
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: 티어
+      description: 티어 선택
+      options:
+        - 브론즈
+        - 실버
+        - 골드
+        - 플레
+
+  - type: input
+    id: problem_number
+    attributes:
+      label: Problem Number (Baekjoon only)
+      description: Enter problem number if you chose Baekjoon
+      placeholder: "1000"
+
   - type: input
     id: level
     attributes:
       label: Level
-      description: Enter level (0 ~ 5)
+      description: Enter level (0 ~ 5) if you chose Programmers
       placeholder: "0"
-    validations:
-      required: true
 
   - type: input
     id: title
     attributes:
-      label: Title
-      description: Problem title (e.g., 동전 던지기, 팽이 돌리기)
-      placeholder: "Problem Title"
-    validations:
-      required: true
+      label: 문제 이름 
+      description: Enter problem title if you chose Programmers
+      placeholder: "문제 이름"
 
-  - type: checkboxes
-    id: progress
-    attributes:
-      label: Progress
-      description: Update this as you go
-      options:
-        - label: Read & understood the problem
-        - label: Designed approach
-        - label: Implemented solution
-        - label: Passed sample tests
-        - label: Finalized (cleanup + explanation)
