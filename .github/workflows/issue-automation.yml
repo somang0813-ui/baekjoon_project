@@ -18,14 +18,12 @@ jobs:
             const body = issue.body || '';
             
             // Parse form data
-            const statusMatch = body.match(/### Status\s*\n\s*(.+)/);
             const platformMatch = body.match(/### 플랫폼\s*\n\s*(.+)/);
             const tierMatch = body.match(/### 티어\s*\n\s*(.+)/);
             const problemNumberMatch = body.match(/### 문제 번호\s*\n\s*(.+)/);
             const levelMatch = body.match(/### Level\s*\n\s*(.+)/);
             const titleMatch = body.match(/### 문제 이름\s*\n\s*(.+)/);
             
-            const status = statusMatch ? statusMatch[1].trim() : '';
             const platform = platformMatch ? platformMatch[1].trim() : '';
             const tier = tierMatch ? tierMatch[1].trim() : '';
             const problemNumber = problemNumberMatch ? problemNumberMatch[1].trim() : '';
@@ -35,33 +33,22 @@ jobs:
             // Build new title based on platform
             let newTitle = '';
             if (platform === 'Baekjoon' && tier && problemNumber) {
-              newTitle = `[${status}] ${platform} ${tier} ${problemNumber}`;
+              newTitle = `${platform} ${tier} ${problemNumber}`;
             } else if (platform === 'Programmers' && level && problemTitle) {
-              newTitle = `[${status}] ${platform} LV${level} - ${problemTitle}`;
+              newTitle = `${platform} LV${level} - ${problemTitle}`;
             } else {
               // Fallback if data is incomplete
-              newTitle = `[${status}] ${platform}`;
+              newTitle = `${platform}`;
             }
             
-            // Determine labels based on status
-            const labels = ['problem'];
-            if (status === '진행 중') {
-              labels.push('진행 중');
-            } else if (status === '보류') {
-              labels.push('보류');
-            } else if (status === 'SOS') {
-              labels.push('SOS');
-            }
-            
-            // Update issue title and labels
+            // Update issue title with problem label only
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
               title: newTitle,
-              labels: labels
+              labels: ['problem']
             });
             
             console.log(`Updated issue #${issue.number}`);
             console.log(`New title: ${newTitle}`);
-            console.log(`Labels: ${labels.join(', ')}`);
