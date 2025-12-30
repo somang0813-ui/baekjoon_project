@@ -1,17 +1,17 @@
 name: Problem
 description: Open an issue before you start solving a problem
-title: "[STATUS] [PLATFORM] - "
+title: "[${{inputs.status}}] ${{inputs.platform}} ${{inputs.tier}}${{inputs.problem_number}} LV${{inputs.level}} - ${{inputs.title}}"
 labels: ["problem"]
 body:
-  - type: checkboxes
+  - type: dropdown
     id: status
     attributes:
       label: Status
-      description: Select one status (will be reflected in title and labels)
+      description: 상태 선택
       options:
-        - label: 진행 중
-        - label: 보류
-        - label: SOS
+        - 진행 중
+        - 보류
+        - SOS
     validations:
       required: true
 
@@ -30,7 +30,7 @@ body:
     id: tier
     attributes:
       label: 티어
-      description: 티어 선택
+      description: Baekjoon 선택 시 티어를 선택하세요
       options:
         - 브론즈
         - 실버
@@ -40,21 +40,21 @@ body:
   - type: input
     id: problem_number
     attributes:
-      label: Problem Number (Baekjoon only)
-      description: Enter problem number if you chose Baekjoon
+      label: 문제 번호
+      description: Baekjoon 선택 시 문제 번호를 입력하세요
       placeholder: "1000"
 
   - type: input
     id: level
     attributes:
       label: Level
-      description: Enter level (0 ~ 5) if you chose Programmers
+      description: Programmers 선택 시 레벨(0~5)을 입력하세요
       placeholder: "0"
 
   - type: input
     id: title
     attributes:
-      label: 문제 이름 
-      description: Enter problem title if you chose Programmers
+      label: 문제 이름
+      description: Programmers 선택 시 문제 이름을 입력하세요
       placeholder: "문제 이름"
 
