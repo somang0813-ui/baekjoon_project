@@ -41,13 +41,19 @@ jobs:
               newTitle = `${platform}`;
             }
             
-            // Update issue title with problem label only
+            // Get current labels and add 'problem' if not present
+            const currentLabels = issue.labels.map(label => label.name);
+            if (!currentLabels.includes('problem')) {
+              currentLabels.push('problem');
+            }
+            
+            // Update issue title and preserve existing labels
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issue.number,
               title: newTitle,
-              labels: ['problem']
+              labels: currentLabels
             });
             
             console.log(`Updated issue #${issue.number}`);
